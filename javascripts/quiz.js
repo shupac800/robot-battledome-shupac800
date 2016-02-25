@@ -26,16 +26,17 @@ function Robot(type) {
 
 function Drone(subtype) {
   this.subtype = subtype;    // every Drone has a subtype
-  this.health = rollDice("5d6") * 10;
+  this.healthDice = "5d6";
+  this.health = null;
 }
 Drone.prototype = new Robot("Drone");
 
-function Whizzer() {
-  this.evadePct = 0.70;  // base chance to evade an attack
+function Glasswing() {
+  this.evadePct = 0.60;  // base chance to evade an attack
   this.protectPct = 0;  // percentage by which damage received is reduced
   this.damageIncPct = 0;   // percentage by which damage inflicted is increased
 }
-Whizzer.prototype = new Drone("Whizzer");
+Glasswing.prototype = new Drone("Glasswing");
 
 function Dragonfly() {
   this.evadePct = 0.50;  // base chance to evade an attack
@@ -44,17 +45,35 @@ function Dragonfly() {
 }
 Dragonfly.prototype = new Drone("Dragonfly");
 
-function Bipedal() {
-  this.health = rollDice("5d8") * 10;
-  this.evadePct = 0.50;  // base chance to evade an attack
-  this.protectPct = 0.15;  // percentage by which damage received is reduced
-  this.damageIncPct = 0.10;   // percentage by which damage inflicted is increased
+////////
+
+function Bipedal(subtype) {
+  this.subtype = subtype;
+  this.healthDice = "5d8";
+  this.health = null;
 }
 Bipedal.prototype = new Robot("Bipedal");
 
+function T1000() {
+  this.evadePct = 0.40;  // base chance to evade an attack
+  this.protectPct = 0.15;  // percentage by which damage received is reduced
+  this.damageIncPct = 0.20;   // percentage by which damage inflicted is increased
+}
+T1000.prototype = new Bipedal("T-1000");
+
+function Replicant() {
+  this.evadePct = 0.50;  // base chance to evade an attack
+  this.protectPct = 0.25;  // percentage by which damage received is reduced
+  this.damageIncPct = 0.10;   // percentage by which damage inflicted is increased
+}
+Replicant.prototype = new Bipedal("Replicant");
+
+////////
+
 function ATV(subtype) {
   this.subtype = subtype;
-  this.health = rollDice("5d12") * 10;
+  this.healthDice = "5d10";
+  this.health = null;
 }
 ATV.prototype = new Robot("ATV");
 
@@ -72,36 +91,98 @@ function Juggernaut() {
 }
 Juggernaut.prototype = new ATV("Juggernaut");
 
-let P1 = new Player(1,"Tinkerbell");
-P1.robot = new Whizzer();
-P1.robot.weapon = new weapon("radialSaw");
-console.log(`Player ${P1.playerNumber} is represented by ${P1.robotName}, a ${P1.robot.subtype} ${P1.robot.type} robot with ${P1.robot.health} health points.`);
-console.log(`${P1.robotName} is strapped with a nasty ${P1.robot.weapon.name}.`);
-P1.robot.mod = new mod("activeCamo");
-console.log(`${P1.robotName} has been outfitted with ${P1.robot.mod.article}${P1.robot.mod.name}.`);
+////////
 
-let P2 = new Player(2,"Behemoth");
-P2.robot = new Stomper();
-P2.robot.weapon = new weapon("warHammer");
-console.log(`Player ${P2.playerNumber} is represented by ${P2.robotName}, a ${P2.robot.subtype} ${P2.robot.type} robot with ${P2.robot.health} health points.`);
-console.log(`${P2.robotName} is strapped with a nasty ${P2.robot.weapon.name}.`);
-P2.robot.mod = new mod("jetpack");
-console.log(`${P2.robotName} has been outfitted with ${P2.robot.mod.article}${P2.robot.mod.name}.`);
+// add event listeners
 
-console.log("Let them do battle!");
+$(".p1type").click(function() {
+  $("#p1weapon").removeClass("hidden");
+});
+$("#p1weapon").click(function() {
+  $("#p1mod").removeClass("hidden");
+});
+$(".p2type").click(function() {
+  $("#p2weapon").removeClass("hidden");
+});
+$("#p2weapon").click(function() {
+  $("#p2mod").removeClass("hidden");
+});
+$("#battle").click(function(event) {
+  event.preventDefault();
+  console.clear();
+  // put HTML form data into "form" object
+  let form = {
+    name:   [],
+    type:   [],
+    weapon: [],
+    mod:    []
+  };
+  form.name[1]   = $("#p1robotName").val();
+  form.type[1]   = $("input[name=p1type]:checked").val();
+  form.weapon[1] = $("input[name=p1weapon]:checked").val();
+  form.mod[1]    = $("input[name=p1mod]:checked").val();
+  form.name[2]   = $("#p2robotName").val();
+  form.type[2]   = $("input[name=p2type]:checked").val();
+  form.weapon[2] = $("input[name=p2weapon]:checked").val();
+  form.mod[2]    = $("input[name=p2mod]:checked").val();
+  let P1 = playerInit(1,form);
+  let P2 = playerInit(2,form);
+  doBattle(P1,P2);
+  // validate input
+  // if ((form.p1type) && (form.p1weapon) && (form.p1mod) && (form.p2type) && (form.p2weapon) && (form.p2mod)) {
+  //   doBattle(form);
+  // } else {
+  //   alert("All player info must be selected");
+  // }
+});
 
-let coinFlip = parseInt(Math.random() * 2);  // 0 or 1
-let playerAttacking = coinFlip + 1;
-console.log(`Player ${playerAttacking} will go first.`);
+function playerInit(playerNum,playerData) {
+  var playerObj = new Player(playerNum,playerData.name[playerNum]);
+  switch (playerData.type[playerNum]) {
+    case "Glasswing":
+      playerObj.robot = new Glasswing();
+      break;
+    case "Dragonfly":
+      playerObj.robot = new Dragonfly();
+      break;
+    case "T-1000":
+      playerObj.robot = new T1000();
+      break;
+    case "Replicant":
+      playerObj.robot = new Replicant();
+      break;
+    case "Stomper":
+      playerObj.robot = new Stomper();
+      break;
+    case "Juggernaut":
+      playerObj.robot = new Juggernaut();
+      break;
+    default:
+      break;
+  }
+  playerObj.robot.weapon = new weapon(playerData.weapon[playerNum]);
+  playerObj.robot.mod = new mod(playerData.mod[playerNum]);
+  playerObj.robot.health = rollDice(playerObj.robot.healthDice) * 10;
+  console.log(`Player ${playerObj.playerNumber} is represented by ${playerObj.robotName}, a ${playerObj.robot.subtype} ${playerObj.robot.type} robot with ${playerObj.robot.health} health points.`);
+  console.log(`${playerObj.robotName} is armed with a nasty ${playerObj.robot.weapon.name}.`);
+  console.log(`${playerObj.robotName} has been outfitted with ${playerObj.robot.mod.article}${playerObj.robot.mod.name}.`);
+  return playerObj;
+}
 
-var doAnotherRound = true;  // have to use var here, not let
-while (doAnotherRound) {
-  if (playerAttacking == 1) {
-    doAnotherRound = attack(P1,P2);
-    playerAttacking = 2;
-  } else {
-    doAnotherRound = attack(P2,P1);
-    playerAttacking = 1;
+function doBattle(P1,P2) {
+  let coinFlip = parseInt(Math.random() * 2);  // 0 or 1
+  var playerAttacking = coinFlip + 1;
+  console.log(`Player ${playerAttacking} will go first.`);
+
+  var doAnotherRound = true;  // have to use var here, not let
+  while (doAnotherRound) {
+    if (playerAttacking == 1) {
+      doAnotherRound = attack(P1,P2);
+      playerAttacking = 2;
+    } else {
+      doAnotherRound = attack(P2,P1);
+      playerAttacking = 1;
+    }
   }
 }
 
@@ -175,7 +256,7 @@ function mod(modName) {
       this.damagePctAdj = 0;
       break;
     case "gravityBender":
-      this.article = "a";
+      this.article = "a ";
       this.name = "gravity bender";
       this.evasionPctAdj = -0.20;
       this.protectionPctAdj = -0.10;

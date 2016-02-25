@@ -2,8 +2,61 @@
 <html>
 <head>
  <title>D. Shuman - Robot Battledome Quiz</title>
+ <link rel="stylesheet" href="css/quiz.css"
 </head>
 <body>
+  <form>
+    <label for name="p1robotName">P1 Robot Name</label>
+    <input type="text" id="p1robotName" name="p1robotName">
+    <input type="radio" class="p1type" name="p1type" value="Glasswing">Glasswing
+    <input type="radio" class="p1type" name="p1type" value="Dragonfly">Dragonfly
+    <input type="radio" class="p1type" name="p1type" value="T-1000">T-1000
+    <input type="radio" class="p1type" name="p1type" value="Replicant">Replicant
+    <input type="radio" class="p1type" name="p1type" value="Stomper">Stomper
+    <input type="radio" class="p1type" name="p1type" value="Juggernaut">Juggernaut<br>
+    <div id='p1weapon' class='hidden'>
+      <input type="radio" name="p1weapon" value="bazooka">bazooka
+      <input type="radio" name="p1weapon" value="flamethrower">flamethrower
+      <input type="radio" name="p1weapon" value="harpoon">harpoon
+      <input type="radio" name="p1weapon" value="warHammer">war hammer
+      <input type="radio" name="p1weapon" value="radialSaw">radial saw
+      <input type="radio" name="p1weapon" value="laserDrill">laser drill<br>
+    </div>
+    <div id='p1mod' class='hidden'>
+      <input type="radio" name="p1mod" value="activeCamo">active camo
+      <input type="radio" name="p1mod" value="uraniumArmor">uranium armor
+      <input type="radio" name="p1mod" value="jetpack">jet pack
+      <input type="radio" name="p1mod" value="gravityBender">gravity bender
+      <input type="radio" name="p1mod" value="roboRoids">roboRoids<br>
+    </div>
+
+    <br>
+    <label for name="p2robotName">P2 Robot Name</label>
+    <input type="text" id="p2robotName" name="p2robotName">
+    <input type="radio" class="p2type" name="p2type" value="Glasswing">Glasswing
+    <input type="radio" class="p2type" name="p2type" value="Dragonfly">Dragonfly
+    <input type="radio" class="p2type" name="p2type" value="T-1000">T-1000
+    <input type="radio" class="p2type" name="p2type" value="Replicant">Replicant
+    <input type="radio" class="p2type" name="p2type" value="Stomper">Stomper
+    <input type="radio" class="p2type" name="p2type" value="Juggernaut">Juggernaut<br>
+    <div id='p2weapon' class='hidden'>
+      <input type="radio" name="p2weapon" value="bazooka">bazooka
+      <input type="radio" name="p2weapon" value="flamethrower">flamethrower
+      <input type="radio" name="p2weapon" value="harpoon">harpoon
+      <input type="radio" name="p2weapon" value="warHammer">war hammer
+      <input type="radio" name="p2weapon" value="radialSaw">radial saw
+      <input type="radio" name="p2weapon" value="laserDrill">laser drill<br>
+    </div>
+    <div id='p2mod' class='hidden'>
+      <input type="radio" name="p2mod" value="activeCamo">active camo
+      <input type="radio" name="p2mod" value="uraniumArmor">uranium armor
+      <input type="radio" name="p2mod" value="jetpack">jet pack
+      <input type="radio" name="p2mod" value="gravityBender">gravity bender
+      <input type="radio" name="p2mod" value="roboRoids">roboRoids<br>
+    </div>
+    <br>
+    <button id="battle">Battle!</button>
+  </form>
   <div id="outputField"></div>
   <script src="bower_components/jquery/dist/jquery.min.js"> </script>
   <script src='javascripts/quiz.js'> </script>
