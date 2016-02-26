@@ -6,7 +6,7 @@ function rollDice(diceString) {
   let nSidedDie = diceString.split("d")[1];
 
   for (let i = 0; i < rollThisManyTimes; i++) {
-    result += parseInt(Math.random() * nSidedDie + 1);
+    result += Math.floor(Math.random() * nSidedDie + 1);
   }
   return result;
 }
@@ -26,20 +26,19 @@ function Robot(type) {
 
 function Drone(subtype) {
   this.subtype = subtype;    // every Drone has a subtype
-  this.healthDice = "5d6";
-  this.health = null;
+  this.healthDice = "5d6";   // all Drones compute health points by this formula
 }
 Drone.prototype = new Robot("Drone");
 
 function Glasswing() {
-  this.evadePct = 0.60;  // base chance to evade an attack
-  this.protectPct = 0;  // percentage by which damage received is reduced
+  this.evadePct = 0.70;  // base chance to evade an attack
+  this.protectPct = 0.10;  // percentage by which damage received is reduced
   this.damageIncPct = 0;   // percentage by which damage inflicted is increased
 }
 Glasswing.prototype = new Drone("Glasswing");
 
 function Dragonfly() {
-  this.evadePct = 0.50;  // base chance to evade an attack
+  this.evadePct = 0.60;  // base chance to evade an attack
   this.protectPct = 0.20;  // percentage by which damage received is reduced
   this.damageIncPct = 0;   // percentage by which damage inflicted is increased
 }
@@ -50,7 +49,6 @@ Dragonfly.prototype = new Drone("Dragonfly");
 function Bipedal(subtype) {
   this.subtype = subtype;
   this.healthDice = "5d8";
-  this.health = null;
 }
 Bipedal.prototype = new Robot("Bipedal");
 
@@ -73,7 +71,6 @@ Replicant.prototype = new Bipedal("Replicant");
 function ATV(subtype) {
   this.subtype = subtype;
   this.healthDice = "5d10";
-  this.health = null;
 }
 ATV.prototype = new Robot("ATV");
 
@@ -92,49 +89,6 @@ function Juggernaut() {
 Juggernaut.prototype = new ATV("Juggernaut");
 
 ////////
-
-// add event listeners
-
-$(".p1type").click(function() {
-  $("#p1weapon").removeClass("hidden");
-});
-$("#p1weapon").click(function() {
-  $("#p1mod").removeClass("hidden");
-});
-$(".p2type").click(function() {
-  $("#p2weapon").removeClass("hidden");
-});
-$("#p2weapon").click(function() {
-  $("#p2mod").removeClass("hidden");
-});
-$("#battle").click(function(event) {
-  event.preventDefault();
-  console.clear();
-  // put HTML form data into "form" object
-  let form = {
-    name:   [],
-    type:   [],
-    weapon: [],
-    mod:    []
-  };
-  form.name[1]   = $("#p1robotName").val();
-  form.type[1]   = $("input[name=p1type]:checked").val();
-  form.weapon[1] = $("input[name=p1weapon]:checked").val();
-  form.mod[1]    = $("input[name=p1mod]:checked").val();
-  form.name[2]   = $("#p2robotName").val();
-  form.type[2]   = $("input[name=p2type]:checked").val();
-  form.weapon[2] = $("input[name=p2weapon]:checked").val();
-  form.mod[2]    = $("input[name=p2mod]:checked").val();
-  let P1 = playerInit(1,form);
-  let P2 = playerInit(2,form);
-  doBattle(P1,P2);
-  // validate input
-  // if ((form.p1type) && (form.p1weapon) && (form.p1mod) && (form.p2type) && (form.p2weapon) && (form.p2mod)) {
-  //   doBattle(form);
-  // } else {
-  //   alert("All player info must be selected");
-  // }
-});
 
 function playerInit(playerNum,playerData) {
   var playerObj = new Player(playerNum,playerData.name[playerNum]);
@@ -170,7 +124,7 @@ function playerInit(playerNum,playerData) {
 }
 
 function doBattle(P1,P2) {
-  let coinFlip = parseInt(Math.random() * 2);  // 0 or 1
+  let coinFlip = Math.floor(Math.random() * 2);  // 0 or 1
   var playerAttacking = coinFlip + 1;
   console.log(`Player ${playerAttacking} will go first.`);
 
@@ -189,22 +143,25 @@ function doBattle(P1,P2) {
 function attack(attacker,defender) {
   console.log(`${attacker.robotName} is attacking ${defender.robotName}.`);
   // was attack evaded?
-  if (rollDice("1d100") <= 100 * (defender.robot.evadePct * (1 + defender.robot.mod.evasionPctAdj) ) ) {
-    console.log(`${defender.robotName} evaded the attack!  Zero damage.`);
+  if (rollDice("1d100") <= 100 * defender.robot.evadePct * (1 + defender.robot.mod.evasionPctAdj) ) {
+    console.log(`${defender.robotName} evades the attack!  Zero damage.`);
     return true;  // doAnotherRound = true
   }
   // what damage done by weapon?
   let damage = rollDice(attacker.robot.weapon.damageDice) * 10;
   // to what extent is damage enhanced by robot's innate strength?
-  damage += parseInt(damage * attacker.robot.damageIncPct);  // always positive or zero
   // to what extent is damage affected by robot's mod?
-  damage += parseInt(damage * attacker.robot.mod.damagePctAdj);  // can be negative
+  let damageAdj = Math.round(
+    (attacker.robot.damageIncPct +      // always positive or zero
+    attacker.robot.mod.damagePctAdj)    // can be positive, negative, or zero
+    * damage);
+  damage += damageAdj;
   console.log(`${attacker.robotName} strikes and does ${damage} points of damage!`);
   // make adjustment to defender's health
   adjustHealth(defender,damage);
   // check for robot death
   if (defender.robot.health <= 0) {
-    console.log(`${attacker.robotName} has vanquished ${defender.robotName}!`);
+    console.log(`${attacker.robotName} the ${attacker.robot.subtype} ${attacker.robot.type} has vanquished ${defender.robotName} the ${defender.robot.subtype} ${defender.robot.type}!`);
     var doAnotherRound = false;  // don't continue battle (have to use var, not let)
   } else {
     var doAnotherRound = true;  // continue battle
@@ -214,10 +171,13 @@ function attack(attacker,defender) {
 
 function adjustHealth(defender,damageSuffered) {
   // damage is mitigated by robot's innate protection factor,
-  // as adjusted by attacker's weapon penalty
+  // as adjusted by defender's weapon's protection penalty
   // and any effects of defender's mod
-  let mitigation = parseInt(defender.robot.protectPct * damageSuffered);
-      /// insert code for protection by mod
+  let mitigation = Math.round(
+    (defender.robot.protectPct +                 // can be positive ,negative, or zero
+    defender.robot.weapon.protectionPenalty +    // always negative or zero
+    defender.robot.mod.protectionPctAdj )        // can be positive, negative, or zero
+    * damageSuffered);
   console.log(`But ${defender.robotName}'s protection mitigates the damage by ${mitigation} points.`);
   // adjust health points
   console.log(`${defender.robotName} goes from ${defender.robot.health} health`);
@@ -232,12 +192,12 @@ function mod(modName) {
       this.name = "electromagnetic shield";
       this.evasionPctAdj = 0;
       this.protectionPctAdj = 0.30;
-      this.damagePctAdj = -0.10;
+      this.damagePctAdj = -0.15;
       break;
     case "uraniumArmor":
       this.article = "";
       this.name = "uranium armor";
-      this.evasionPctAdj = -0.10;
+      this.evasionPctAdj = -0.15;
       this.protectionPctAdj = 0.30;
       this.damagePctAdj = 0;
       break;
@@ -278,41 +238,88 @@ function weapon(weaponName) {
   switch (weaponName) {
     case "laserDrill":
       this.name = "laser drill";
-      this.damageDice = "1d6";
+      this.damageDice = "1d4";
       this.evasionPenalty = 0;
       this.protectionPenalty = 0;
     case "radialSaw":
       this.name = "radial saw";
-      this.damageDice = "1d8";
+      this.damageDice = "1d6";
       this.evasionPenalty = -0.10;
-      this.protectionPenalty = -0.10;
+      this.protectionPenalty = -0.05;
       break;
     case "warHammer":
       this.name = "war hammer";
-      this.damageDice = "2d4";
+      this.damageDice = "1d8";
       this.evasionPenalty = -0.15;
       this.protectionPenalty = -0.10;
       break;
     case "harpoon":
       this.name = "harpoon";
-      this.damageDice = "2d6";
+      this.damageDice = "2d4";
       this.evasionPenalty = -0.20;
       this.protectionPenalty = -0.15;
       break;
     case "flamethrower":
       this.name = "flamethrower";
-      this.damageDice = "1d10";
+      this.damageDice = "1d9";
       this.evasionPenalty = -0.25;
-      this.protectionPenalty = -0.15;
+      this.protectionPenalty = -0.25;
       break;
     case "bazooka":
       this.name = "bazooka";
-      this.damageDice = "4d4";
+      this.damageDice = "2d5";
       this.evasionPenalty = -0.30;
-      this.protectionPenalty = -0.20;
+      this.protectionPenalty = -0.30;
       break;
     default:
       break;
   }
 }
 
+// add event listeners
+$(".p1type").change(function() {
+  $("#p1weapon").removeClass("hidden");
+});
+$("#p1weapon").change(function() {
+  $("#p1mod").removeClass("hidden");
+});
+$(".p2type").change(function() {
+  $("#p2weapon").removeClass("hidden");
+});
+$("#p2weapon").change(function() {
+  $("#p2mod").removeClass("hidden");
+});
+$("#battle").click(function(event) {
+  event.preventDefault();
+  console.clear();
+
+  // put HTML form data into "form" object
+  let form = {
+    name:   [],
+    type:   [],
+    weapon: [],
+    mod:    []
+  };
+  // player 1 fields
+  form.name[1]   = $("#p1robotName").val();
+  form.type[1]   = $("input[name=p1type]:checked").val();
+  form.weapon[1] = $("input[name=p1weapon]:checked").val();
+  form.mod[1]    = $("input[name=p1mod]:checked").val();
+  // player 2 fields
+  form.name[2]   = $("#p2robotName").val();
+  form.type[2]   = $("input[name=p2type]:checked").val();
+  form.weapon[2] = $("input[name=p2weapon]:checked").val();
+  form.mod[2]    = $("input[name=p2mod]:checked").val();
+
+  let P1 = playerInit(1,form);
+  let P2 = playerInit(2,form);
+
+  console.log("Let them do battle!");
+  doBattle(P1,P2);
+  // validate input
+  // if ((form.p1type) && (form.p1weapon) && (form.p1mod) && (form.p2type) && (form.p2weapon) && (form.p2mod)) {
+  //   doBattle(form);
+  // } else {
+  //   alert("All player info must be selected");
+  // }
+});
