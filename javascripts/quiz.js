@@ -114,8 +114,8 @@ function playerInit(playerNum,playerData) {
     default:
       break;
   }
-  playerObj.robot.weapon = new weapon(playerData.weapon[playerNum]);
-  playerObj.robot.mod = new mod(playerData.mod[playerNum]);
+  playerObj.robot.weapon = new Weapon(playerData.weapon[playerNum]);
+  playerObj.robot.mod = new Mod(playerData.mod[playerNum]);
   playerObj.robot.health = rollDice(playerObj.robot.healthDice) * 10;
   console.log(`Player ${playerObj.playerNumber} is represented by ${playerObj.robotName}, a ${playerObj.robot.subtype} ${playerObj.robot.type} robot with ${playerObj.robot.health} health points.`);
   console.log(`${playerObj.robotName} is armed with a nasty ${playerObj.robot.weapon.name}.`);
@@ -123,12 +123,15 @@ function playerInit(playerNum,playerData) {
   return playerObj;
 }
 
+function coinFlip() {
+  return Math.floor(Math.random() * 2);  // 0 or 1
+}
+
 function doBattle(P1,P2) {
-  let coinFlip = Math.floor(Math.random() * 2);  // 0 or 1
-  var playerAttacking = coinFlip + 1;
+  let playerAttacking = coinFlip() + 1;
   console.log(`Player ${playerAttacking} will go first.`);
 
-  var doAnotherRound = true;  // have to use var here, not let
+  let doAnotherRound = true;
   while (doAnotherRound) {
     if (playerAttacking == 1) {
       doAnotherRound = attack(P1,P2);
@@ -138,6 +141,7 @@ function doBattle(P1,P2) {
       playerAttacking = 1;
     }
   }
+  return 0; // exit_code = 0 means battle completed successfully
 }
 
 function attack(attacker,defender) {
@@ -151,20 +155,16 @@ function attack(attacker,defender) {
   let damage = rollDice(attacker.robot.weapon.damageDice) * 10;
   // to what extent is damage enhanced by robot's innate strength?
   // to what extent is damage affected by robot's mod?
-  let damageAdj = Math.round(
-    (attacker.robot.damageIncPct +      // always positive or zero
-    attacker.robot.mod.damagePctAdj)    // can be positive, negative, or zero
-    * damage);
+  let damageAdj = Math.round((attacker.robot.damageIncPct + attacker.robot.mod.damagePctAdj) * damage);
   damage += damageAdj;
   console.log(`${attacker.robotName} strikes and does ${damage} points of damage!`);
   // make adjustment to defender's health
   adjustHealth(defender,damage);
   // check for robot death
+  let doAnotherRound = true;
   if (defender.robot.health <= 0) {
     console.log(`${attacker.robotName} the ${attacker.robot.subtype} ${attacker.robot.type} has vanquished ${defender.robotName} the ${defender.robot.subtype} ${defender.robot.type}!`);
-    var doAnotherRound = false;  // don't continue battle (have to use var, not let)
-  } else {
-    var doAnotherRound = true;  // continue battle
+    doAnotherRound = false;  // don't continue battle (have to use var, not let)
   }
   return doAnotherRound;
 }
@@ -173,11 +173,7 @@ function adjustHealth(defender,damageSuffered) {
   // damage is mitigated by robot's innate protection factor,
   // as adjusted by defender's weapon's protection penalty
   // and any effects of defender's mod
-  let mitigation = Math.round(
-    (defender.robot.protectPct +                 // can be positive ,negative, or zero
-    defender.robot.weapon.protectionPenalty +    // always negative or zero
-    defender.robot.mod.protectionPctAdj )        // can be positive, negative, or zero
-    * damageSuffered);
+  let mitigation = Math.round((defender.robot.protectPct + defender.robot.weapon.protectionPenalty + defender.robot.mod.protectionPctAdj ) * damageSuffered);
   console.log(`But ${defender.robotName}'s protection mitigates the damage by ${mitigation} points.`);
   // adjust health points
   console.log(`${defender.robotName} goes from ${defender.robot.health} health`);
@@ -185,7 +181,7 @@ function adjustHealth(defender,damageSuffered) {
   console.log(`to ${defender.robot.health} health.`);
 }
 
-function mod(modName) {
+function Mod(modName) {
   switch (modName) {
     case "EMShield":
       this.article = "an ";
@@ -222,9 +218,9 @@ function mod(modName) {
       this.protectionPctAdj = -0.10;
       this.damagePctAdj = 0.25;
       break;
-    case "roboRoids":
+    case "roboSteroids":
       this.article = "";
-      this.name = "roboRoids";
+      this.name = "roboSteroids";
       this.evasionPctAdj = 0;
       this.protectionPctAdj = -0.10;
       this.damagePctAdj = 0.15;
@@ -234,13 +230,14 @@ function mod(modName) {
   }
 }
 
-function weapon(weaponName) {
+function Weapon(weaponName) {
   switch (weaponName) {
     case "laserDrill":
       this.name = "laser drill";
       this.damageDice = "1d4";
       this.evasionPenalty = 0;
       this.protectionPenalty = 0;
+      break;
     case "radialSaw":
       this.name = "radial saw";
       this.damageDice = "1d6";
