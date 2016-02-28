@@ -22,7 +22,7 @@ describe("The Robot Battledome application", function() {
   });
   it("should have a Player function that accepts a player number and robot name", function() {
     expect(Player).toBeDefined();
-    var P1 = new Player(1,"BigBird");
+    P1 = new Player(1,"BigBird");
     expect(P1.playerNumber).toBe(1);
     expect(P1.robotName).toBe("BigBird");
   });

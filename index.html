@@ -2,10 +2,11 @@
 <html>
 <head>
  <title>D. Shuman - Robot Battledome Quiz</title>
- <link rel="stylesheet" href="css/quiz.css"
+ <link href='https://fonts.googleapis.com/css?family=Karla:400,700' rel='stylesheet' type='text/css'>
+ <link rel="stylesheet" href="css/quiz.css">
 </head>
 <body>
-  <form>
+  <form style="display:none">
     <label for name="p1robotName">P1 Robot Name</label>
     <input type="text" id="p1robotName" name="p1robotName">
     <input type="radio" class="p1type" name="p1type" value="Glasswing">Glasswing
@@ -63,7 +64,194 @@
     <br>
     <button id="battle">Battle!</button>
   </form>
-  <div id="outputField"></div>
+  <div class="p1type">
+    <img src="img/unlitredLED.png" class="col-1 row-1" id="p1-Glasswing">
+    <img src="img/unlitredLED.png" class="col-1 row-2" id="p1-Dragonfly">
+    <img src="img/unlitredLED.png" class="col-1 row-3" id="p1-T-1000">
+    <img src="img/unlitredLED.png" class="col-1 row-4" id="p1-Replicant">
+    <img src="img/unlitredLED.png" class="col-1 row-5" id="p1-Stomper">
+    <img src="img/unlitredLED.png" class="col-1 row-6" id="p1-Juggernaut">
+  </div>
+  <div class="p1c1YGLEDs">
+    <img src="img/unlityellowLED.png" class="YGCol-1 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-2 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-3 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-4 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-5 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-6 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-7 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-1 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-2 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-3 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-4 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-5 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-6 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-7 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-1 YGRow-3">
+    <img src="img/unlityellowLED.png" class="YGCol-2 YGRow-3">
+    <img src="img/unlityellowLED.png" class="YGCol-3 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-4 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-5 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-6 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-7 YGRow-3">
+  </div>
+  <div class="p1weapon">
+    <img src="img/unlitredLED.png" class="col-2 row-1" id="p1-laserDrill">
+    <img src="img/unlitredLED.png" class="col-2 row-2" id="p1-radialSaw">
+    <img src="img/unlitredLED.png" class="col-2 row-3" id="p1-warHammer">
+    <img src="img/unlitredLED.png" class="col-2 row-4" id="p1-harpoon">
+    <img src="img/unlitredLED.png" class="col-2 row-5" id="p1-flamethrower">
+    <img src="img/unlitredLED.png" class="col-2 row-6" id="p1-bazooka">
+  </div>
+  <div class="p1c2YGLEDs">
+    <img src="img/unlityellowLED.png" class="YGCol-8 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-9 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-10 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-11 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-12 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-13 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-14 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-8 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-9 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-10 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-11 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-12 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-13 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-14 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-8 YGRow-3">
+    <img src="img/unlityellowLED.png" class="YGCol-9 YGRow-3">
+    <img src="img/unlityellowLED.png" class="YGCol-10 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-11 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-12 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-13 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-14 YGRow-3">
+  </div>
+  <div class="p1mod">
+    <img src="img/unlitredLED.png" class="col-3 row-1" id="p1-EMShield">
+    <img src="img/unlitredLED.png" class="col-3 row-2" id="p1-uraniumArmor">
+    <img src="img/unlitredLED.png" class="col-3 row-3" id="p1-activeCamo">
+    <img src="img/unlitredLED.png" class="col-3 row-4" id="p1-jetpack">
+    <img src="img/unlitredLED.png" class="col-3 row-5" id="p1-gravityBender">
+    <img src="img/unlitredLED.png" class="col-3 row-6" id="p1-roboSteroids">
+  </div>
+  <div class="p1c3YGLEDs">
+    <img src="img/unlityellowLED.png" class="YGCol-15 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-16 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-17 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-18 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-19 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-20 YGRow-1">
+    <img src="img/unlitgreenLED.png" class="YGCol-21 YGRow-1">
+    <img src="img/unlityellowLED.png" class="YGCol-15 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-16 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-17 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-18 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-19 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-20 YGRow-2">
+    <img src="img/unlitgreenLED.png" class="YGCol-21 YGRow-2">
+    <img src="img/unlityellowLED.png" class="YGCol-15 YGRow-3">
+    <img src="img/unlityellowLED.png" class="YGCol-16 YGRow-3">
+    <img src="img/unlityellowLED.png" class="YGCol-17 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-18 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-19 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-20 YGRow-3">
+    <img src="img/unlitgreenLED.png" class="YGCol-21 YGRow-3">
+  </div>
+  <div class="p2type">
+    <img src="img/unlitredLED.png" class="col-1 row-7" id="p2-Glasswing">
+    <img src="img/unlitredLED.png" class="col-1 row-8" id="p2-Dragonfly">
+    <img src="img/unlitredLED.png" class="col-1 row-9" id="p2-T-1000">
+    <img src="img/unlitredLED.png" class="col-1 row-10" id="p2-Replicant">
+    <img src="img/unlitredLED.png" class="col-1 row-11" id="p2-Stomper">
+    <img src="img/unlitredLED.png" class="col-1 row-12" id="p2-Juggernaut">
+  </div>
+  <div class="p2c1YGLEDs">
+    <img src="img/unlityellowLED.png" class="YGCol-1 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-2 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-3 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-4 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-5 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-6 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-7 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-1 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-2 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-3 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-4 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-5 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-6 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-7 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-1 YGRow-6">
+    <img src="img/unlityellowLED.png" class="YGCol-2 YGRow-6">
+    <img src="img/unlityellowLED.png" class="YGCol-3 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-4 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-5 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-6 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-7 YGRow-6">
+  </div>
+  <div class="p2weapon">
+    <img src="img/unlitredLED.png" class="col-2 row-7" id="p2-laserDrill">
+    <img src="img/unlitredLED.png" class="col-2 row-8" id="p2-radialSaw">
+    <img src="img/unlitredLED.png" class="col-2 row-9" id="p2-warHammer">
+    <img src="img/unlitredLED.png" class="col-2 row-10" id="p2-harpoon">
+    <img src="img/unlitredLED.png" class="col-2 row-11" id="p2-flamethrower">
+    <img src="img/unlitredLED.png" class="col-2 row-12" id="p2-bazooka">
+  </div>
+  <div class="p2c2YGLEDs">
+    <img src="img/unlityellowLED.png" class="YGCol-8 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-9 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-10 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-11 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-12 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-13 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-14 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-8 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-9 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-10 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-11 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-12 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-13 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-14 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-8 YGRow-6">
+    <img src="img/unlityellowLED.png" class="YGCol-9 YGRow-6">
+    <img src="img/unlityellowLED.png" class="YGCol-10 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-11 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-12 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-13 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-14 YGRow-6">
+  </div>
+  <div class="p2mod">
+    <img src="img/unlitredLED.png" class="col-3 row-7" id="p2-EMShield">
+    <img src="img/unlitredLED.png" class="col-3 row-8" id="p2-uraniumArmor">
+    <img src="img/unlitredLED.png" class="col-3 row-9" id="p2-activeCamo">
+    <img src="img/unlitredLED.png" class="col-3 row-10" id="p2-jetpack">
+    <img src="img/unlitredLED.png" class="col-3 row-11" id="p2-gravityBender">
+    <img src="img/unlitredLED.png" class="col-3 row-12" id="p2-roboSteroids">
+  </div>
+  <div class="p2c3YGLEDs">
+    <img src="img/unlityellowLED.png" class="YGCol-15 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-16 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-17 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-18 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-19 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-20 YGRow-4">
+    <img src="img/unlitgreenLED.png" class="YGCol-21 YGRow-4">
+    <img src="img/unlityellowLED.png" class="YGCol-15 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-16 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-17 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-18 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-19 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-20 YGRow-5">
+    <img src="img/unlitgreenLED.png" class="YGCol-21 YGRow-5">
+    <img src="img/unlityellowLED.png" class="YGCol-15 YGRow-6">
+    <img src="img/unlityellowLED.png" class="YGCol-16 YGRow-6">
+    <img src="img/unlityellowLED.png" class="YGCol-17 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-18 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-19 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-20 YGRow-6">
+    <img src="img/unlitgreenLED.png" class="YGCol-21 YGRow-6">
+  </div>
+  <img src="img/redButton-unlit.png" id="battleButton">
+
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src='javascripts/quiz.js'></script>
 </body>
