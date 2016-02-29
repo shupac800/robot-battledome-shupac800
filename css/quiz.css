@@ -1,8 +1,7 @@
 body {
   position: relative;
-  background-image: url('../img/panel-workingcopy.jpg');
+  background-image: url('../img/panel.jpg');
   background-repeat: no-repeat;
-  font-family: "Karla", Arial, sans-serif;
 }
 
 #battleButton {
@@ -11,14 +10,38 @@ body {
   left: 653px;
 }
 
-#outputField {
+.type-text p {
+  margin: 0;
+  padding: 0;
   color: white;
   font-size: .8em;
 }
 
-.type-text {
-  color: white;
-  font-size: .8em;
+#p1RobotName {
+  font-family: "Karla", "Arial", sans-serif;
+  position: absolute;
+  top: 0px;
+  left: 720px;
+}
+
+#p2RobotName {
+  font-family: "Karla", "Arial", sans-serif;
+  position: absolute;
+  top: 0px;
+  left: 945px;
+}
+
+#outputTextGoesHere {
+  position: absolute;
+  background-color: black;
+  width: 400px;
+  overflow: auto;
+  top: 30px;
+  left: 720px;
+  /*height: 612px;*/
+  height: 260px;
+  font-family: "Karla", "Arial", sans-serif;
+  font-size: 1.2em;
 }
 
 .col-1 {position: absolute; left: 38px;}
@@ -66,4 +89,3 @@ body {
 .YGCol-19 {position: absolute; left: 552px;}
 .YGCol-20 {position: absolute; left: 572px;}
 .YGCol-21 {position: absolute; left: 592px;}
-
