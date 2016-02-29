@@ -134,8 +134,8 @@ function coinFlip() {
 
 function doBattle(P1,P2) {
   let playerAttacking = coinFlip() + 1;
-  console.log(`Player ${playerAttacking} will go first.`);
-  report.push(`Player ${playerAttacking} will go first.`);
+  console.log(`Player ${playerAttacking} wins the coin flip and will go first.`);
+  report.push(`Player ${playerAttacking} wins the coin flip and will go first.`);
 
   let doAnotherRound = true;
   while (doAnotherRound) {
@@ -401,16 +401,23 @@ function teletype(str,charDelay) {
 //  MAIN
 ///////////////////////////
 
-let report = [];       // global array that holds each line of text output
-let ttyObject = [{}];  // global array used by "teletype" text output function
+var report = [];       // global array that holds each line of text output
+var ttyObject = [{}];  // global array used by "teletype" text output function
 
 // data entered goes into global "form" object
-let form = {
+var form = {
   name:   [],
   type:   [],
   weapon: [],
   mod:    []
 };
+
+// to conform with instructions, all buttons except p1type should start off as hidden
+$(".p1weapon").prop("style","display:none");
+$(".p1mod").prop("style","display:none");
+$(".p2type").prop("style","display:none");
+$(".p2weapon").prop("style","display:none");
+$(".p2mod").prop("style","display:none");
 
 // add P1 event listeners
 $("#p1RobotName").click(function() {
@@ -447,6 +454,7 @@ $(".p1type").click(function() {
       break;
   }
   doYGLEDs(1,1,dummySubtypeObj.ledPattern);
+  $(".p1weapon").prop("style","display:inline");
 });
 
 $(".p1weapon").click(function() {
@@ -458,6 +466,7 @@ $(".p1weapon").click(function() {
   // turn off/on the yellow and green LEDs in this class
   let dummyWeaponObj = new Weapon(form.weapon[1]);
   doYGLEDs(1,2,dummyWeaponObj.ledPattern);
+  $(".p1mod").prop("style","display:inline");
 });
 
 $(".p1mod").click(function() {
@@ -469,6 +478,7 @@ $(".p1mod").click(function() {
   // turn off/on the yellow and green LEDs in this class
   let dummyModObj = new Mod(form.mod[1]);
   doYGLEDs(1,3,dummyModObj.ledPattern);
+  $(".p2type").prop("style","display:inline");
 });
 
 // add P2 event listeners
@@ -506,6 +516,7 @@ $(".p2type").click(function() {
       break;
   }
   doYGLEDs(2,1,dummySubtypeObj.ledPattern);
+  $(".p2weapon").prop("style","display:inline");
 });
 
 $(".p2weapon").click(function() {
@@ -517,6 +528,7 @@ $(".p2weapon").click(function() {
   // turn off/on the yellow and green LEDs in this class
   let dummyWeaponObj = new Weapon(form.weapon[2]);
   doYGLEDs(2,2,dummyWeaponObj.ledPattern);
+  $(".p2mod").prop("style","display:inline");
 });
 
 $(".p2mod").click(function() {
