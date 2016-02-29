@@ -1,5 +1,9 @@
 "use strict";  // enable ES6
 
+var report = [];  // global array that holds each line of text output
+var report2 = [{}];
+var a;
+
 function rollDice(diceString) {
   let result = 0;  // initialize result
   let rollThisManyTimes = diceString.split("d")[0];
@@ -125,9 +129,6 @@ function playerInit(playerNum,playerData) {
   playerObj.robot.weapon = new Weapon(playerData.weapon[playerNum]);
   playerObj.robot.mod = new Mod(playerData.mod[playerNum]);
   playerObj.robot.health = rollDice(playerObj.robot.healthDice);
-  console.log(`Player ${playerObj.playerNumber} is represented by ${playerObj.robotName}, a ${playerObj.robot.subtype} ${playerObj.robot.type} robot with ${playerObj.robot.health} health points.`);
-  console.log(`${playerObj.robotName} is armed with a nasty ${playerObj.robot.weapon.name}.`);
-  console.log(`${playerObj.robotName} has been outfitted with ${playerObj.robot.mod.article}${playerObj.robot.mod.name}.`);
   return playerObj;
 }
 
@@ -138,6 +139,7 @@ function coinFlip() {
 function doBattle(P1,P2) {
   let playerAttacking = coinFlip() + 1;
   console.log(`Player ${playerAttacking} will go first.`);
+  report.push(`\nPlayer ${playerAttacking} will go first.`);
 
   let doAnotherRound = true;
   while (doAnotherRound) {
@@ -154,9 +156,11 @@ function doBattle(P1,P2) {
 
 function attack(attacker,defender) {
   console.log(`${attacker.robotName} is attacking ${defender.robotName}.`);
+  report.push(`\n${attacker.robotName} is attacking ${defender.robotName}.`);
   // was attack evaded?
   if (rollDice("1d100") <= 100 * defender.robot.evadePct * (1 + defender.robot.mod.evasionPctAdj) ) {
     console.log(`${defender.robotName} evades the attack!  Zero damage.`);
+    report.push(`\n${defender.robotName} evades the attack!  Zero damage.`);
     return true;  // doAnotherRound = true
   }
   // what damage done by weapon?
@@ -166,12 +170,14 @@ function attack(attacker,defender) {
   let damageAdj = Math.round((attacker.robot.damageIncPct + attacker.robot.mod.damagePctAdj) * damage);
   damage += damageAdj;
   console.log(`${attacker.robotName} strikes and does ${damage} points of damage!`);
+  report.push(`\n${attacker.robotName} strikes and does ${damage} points of damage!`);
   // make adjustment to defender's health
   adjustHealth(defender,damage);
   // check for robot death
   let doAnotherRound = true;
   if (defender.robot.health <= 0) {
     console.log(`${attacker.robotName} the ${attacker.robot.subtype} ${attacker.robot.type} has vanquished ${defender.robotName} the ${defender.robot.subtype} ${defender.robot.type}!`);
+    report.push(`\n${attacker.robotName} the ${attacker.robot.subtype} ${attacker.robot.type} has vanquished ${defender.robotName} the ${defender.robot.subtype} ${defender.robot.type}!`);
     doAnotherRound = false;  // don't continue battle (have to use var, not let)
   }
   return doAnotherRound;
@@ -183,10 +189,13 @@ function adjustHealth(defender,damageSuffered) {
   // and any effects of defender's mod
   let mitigation = Math.round((defender.robot.protectPct + defender.robot.weapon.protectionPenalty + defender.robot.mod.protectionPctAdj ) * damageSuffered);
   console.log(`But ${defender.robotName}'s protection mitigates the damage by ${mitigation} points.`);
+  report.push(`\nBut ${defender.robotName}'s protection mitigates the damage by ${mitigation} points.`);
   // adjust health points
   console.log(`${defender.robotName} goes from ${defender.robot.health} health`);
+  report.push(`\n${defender.robotName} goes from ${defender.robot.health} health`);
   defender.robot.health -= damageSuffered - mitigation;
   console.log(`to ${defender.robot.health} health.`);
+  report.push(` to ${defender.robot.health} health.`);
 }
 
 function Mod(modName) {
@@ -265,28 +274,28 @@ function Weapon(weaponName) {
       this.evasionPenalty = -0.15;
       this.protectionPenalty = -0.10;
       this.damageDice = "20d4";
-      this.ledPattern = ["0010000", "0010000", "0001100"]
+      this.ledPattern = ["0010000", "0010000", "0001100"];
       break;
     case "harpoon":
       this.name = "harpoon";
       this.evasionPenalty = -0.20;
       this.protectionPenalty = -0.15;
       this.damageDice = "15d6";
-      this.ledPattern = ["0110000", "0110000", "0001110"]
+      this.ledPattern = ["0110000", "0110000", "0001110"];
       break;
     case "flamethrower":
       this.name = "flamethrower";
       this.evasionPenalty = -0.25;
       this.protectionPenalty = -0.25;
       this.damageDice = "30d3";
-      this.ledPattern = ["0110000", "0110000", "0001110"]
+      this.ledPattern = ["0110000", "0110000", "0001110"];
       break;
     case "bazooka":
       this.name = "bazooka";
       this.evasionPenalty = -0.30;
       this.protectionPenalty = -0.30;
       this.damageDice = "20d5";
-      this.ledPattern = ["1110000", "1110000", "0001111"]
+      this.ledPattern = ["1110000", "1110000", "0001111"];
       break;
     default:
       break;
@@ -318,10 +327,7 @@ function doYGLEDs(playerNumber,col,ledPattern) {
     var stringIndex = 0;
     for (let j = startCol; j < startCol + 3; j++) {  // LEDs 1-3 are yellow
       let classString = `YGCol-${j} YGRow-${i}`;
-            console.log("classString",classString);
       let buttonEl = document.getElementsByClassName(classString);
-        console.log("testing string =",ledPattern[ledPatternIndex]);
-        console.log("testing charat j=",stringIndex);
       if (ledPattern[ledPatternIndex].charAt(stringIndex) == "1") {
         buttonEl[0].setAttribute("src","img/lityellowLED.png");
       } else {
@@ -331,10 +337,7 @@ function doYGLEDs(playerNumber,col,ledPattern) {
     }
     for (let j = startCol + 3; j < startCol + 7; j++) {  // LEDs 4-7 are green
       let classString = `YGCol-${j} YGRow-${i}`;
-      console.log("classString",classString);
       let buttonEl = document.getElementsByClassName(classString);
-        console.log("testing string =",ledPattern[ledPatternIndex]);
-        console.log("testing charat j=",stringIndex);
       if (ledPattern[ledPatternIndex].charAt(stringIndex) == "1") {
         buttonEl[0].setAttribute("src","img/litgreenLED.png");
       } else {
@@ -353,7 +356,6 @@ $(".p1type").click(function(event) {
   // turn on LED of button that was clicked -- how to do this next line in jQuery?
   document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
   form.type[1] = event.target.id.slice(3);  // take off the "p1-" prefix
-  console.log("p1 type set to",form.type[1]);
   // turn off/on the yellow and green LEDs in this class
   var dummySubtypeObj = {};
   switch ("dummySubtypeObj",form.type[1]) {
@@ -387,7 +389,6 @@ $(".p1weapon").click(function(event) {
   // turn on LED of button that was clicked -- how to do this next line in jQuery?
   document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
   form.weapon[1] = event.target.id.slice(3);  // take off the "p1-" prefix
-  console.log("p1 weapon set to",form.weapon[1]);
   // turn off/on the yellow and green LEDs in this class
   let dummyWeaponObj = new Weapon(form.weapon[1]);
   doYGLEDs(1,2,dummyWeaponObj.ledPattern);
@@ -399,7 +400,6 @@ $(".p1mod").click(function(event) {
   // turn on LED of button that was clicked -- how to do this next line in jQuery?
   document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
   form.mod[1] = event.target.id.slice(3);  // take off the "p1-" prefix
-  console.log("p1 mod set to",form.mod[1]);
   // turn off/on the yellow and green LEDs in this class
   let dummyModObj = new Mod(form.mod[1]);
   doYGLEDs(1,3,dummyModObj.ledPattern);
@@ -412,10 +412,8 @@ $(".p2type").click(function(event) {
   // turn on LED of button that was clicked -- how to do this next line in jQuery?
   document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
   form.type[2] = event.target.id.slice(3);  // take off the "p2-" prefix
-  console.log("p2 type set to",form.type[2]);
   // turn off/on the yellow and green LEDs in this class
   var dummySubtypeObj = {};
-  console.log("switching on string",form.type[2]);
   switch ("dummySubtypeObj",form.type[2]) {
     case "Glasswing":
       dummySubtypeObj = new Glasswing();
@@ -438,7 +436,6 @@ $(".p2type").click(function(event) {
     default:
       break;
   }
-  console.log("before YGLEDs call, ledPattern is",dummySubtypeObj.ledPattern);
   doYGLEDs(2,1,dummySubtypeObj.ledPattern);
 });
 
@@ -448,7 +445,6 @@ $(".p2weapon").click(function(event) {
   // turn on LED of button that was clicked -- how to do this next line in jQuery?
   document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
   form.weapon[2] = event.target.id.slice(3);  // take off the "p1-" prefix
-  console.log("p1 weapon set to",form.weapon[2]);
   // turn off/on the yellow and green LEDs in this class
   let dummyWeaponObj = new Weapon(form.weapon[2]);
   doYGLEDs(2,2,dummyWeaponObj.ledPattern);
@@ -460,28 +456,139 @@ $(".p2mod").click(function(event) {
   // turn on LED of button that was clicked -- how to do this next line in jQuery?
   document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
   form.mod[2] = event.target.id.slice(3);  // take off the "p1-" prefix
-  console.log("p1 mod set to",form.mod[2]);
   // turn off/on the yellow and green LEDs in this class
   let dummyModObj = new Mod(form.mod[2]);
   doYGLEDs(2,3,dummyModObj.ledPattern);
 });
 
 $("#battleButton").click(function(event) {
+  // quick fill -- for testing
+  form.type[1] = "Glasswing";
+  form.type[2] = "Juggernaut";
+  form.weapon[1] = "radialSaw";
+  form.weapon[2] = "laserDrill";
+  form.mod[1] = "gravityBender";
+  form.mod[2] = "activeCamo";
+
   // validate inputs
-  if ( (!form.type[1]) || (!form.type[2]) ||
+  if ( (!form.type[1])   || (!form.type[2])   ||
        (!form.weapon[1]) || (!form.weapon[2]) ||
-       (!form.mod[1]) || (!form.mod[2]) ) {
+       (!form.mod[1])    || (!form.mod[2]) ) {
     alert("Data is missing");
     return;
   }
 
   console.clear();
-  document.getElementById("battleButton").setAttribute("src","img/redButton-lit.png");
+  $(".type-text").html("");
+  document.getElementById("battleButton").setAttribute("src","img/redButton-lit.png");  // illuminate "battle" button
 
   // build players' robots
   let P1 = playerInit(1,form);
   let P2 = playerInit(2,form);
+  P1.robotName = "Count Chocula";
+  P2.robotName = "Boo Berry";
+
+  console.log(`Player 1 is represented by ${P1.robotName}, a ${P1.robot.subtype} ${P1.robot.type} robot with ${P1.robot.health} health points.`);
+  report.push(`\nPlayer 1 is represented by ${P1.robotName}, a ${P1.robot.subtype} ${P1.robot.type} robot with ${P1.robot.health} health points.`);
+
+  console.log(`${P1.robotName} is armed with a nasty ${P1.robot.weapon.name}.`);
+  report.push(`\n${P1.robotName} is armed with a nasty ${P1.robot.weapon.name}.`);
+
+  console.log(`${P1.robotName} has been outfitted with ${P1.robot.mod.article}${P1.robot.mod.name}.`);
+  report.push(`\n${P1.robotName} has been outfitted with ${P1.robot.mod.article}${P1.robot.mod.name}.`);
+
+  console.log(`Player 2 is represented by ${P2.robotName}, a ${P2.robot.subtype} ${P2.robot.type} robot with ${P2.robot.health} health points.`);
+  report.push(`\nPlayer 2 is represented by ${P2.robotName}, a ${P2.robot.subtype} ${P2.robot.type} robot with ${P2.robot.health} health points.`);
+  
+  console.log(`${P2.robotName} is armed with a nasty ${P2.robot.weapon.name}.`);
+  report.push(`\n${P2.robotName} is armed with a nasty ${P2.robot.weapon.name}.`);
+  
+  console.log(`${P2.robotName} has been outfitted with ${P2.robot.mod.article}${P2.robot.mod.name}.`);
+  report.push(`\n${P2.robotName} has been outfitted with ${P2.robot.mod.article}${P2.robot.mod.name}.`);
 
   console.log("Let them do battle!");
+  report.push("\nLet them do battle!");
+
   doBattle(P1,P2);
+  scheduleOutput();
+  // $(function(){
+  //   $(".type-text").typed({
+  //             strings: report,  // value is array of strings
+  //             loop: false,
+  //             loopCount: false,
+  //             showCursor: true,
+  //             cursorChar: "|",
+  //             contentType: "html",
+  //             typeSpeed: 1,
+  //             resetCallback: function(){document.getElementById("battleButton").setAttribute("src","img/redButton-unlit.png");}
+  //   });
+  // });
 });
+
+//idea:
+//go through array, compute time it's going to take to display each line
+//for each line, construct a setTimeout function where the delay is cumulative, based on time it
+//takes to execute each previous line
+function scheduleOutput() {
+  var initialDelay = 0;  // wait this long before outputting first line
+  report2[0] = {outputAfterMs: initialDelay};  // initialize first array element; first output happens after initial delay 
+    // (can condense this into report array; don't really need a new one)
+  var timeElapsed = initialDelay;
+  var delayBetweenLines = 600;  // delay between lines, in ms
+  var charDelay = 10;  // delay in ms after each character
+  for (var i = 0; i < report.length; i++) {
+    // add new k:v pairs to report2[i] object
+    report2[i].index = i;
+    report2[i].chars = report[i].length;
+    report2[i].text  = report[i];
+    report2[i].time  = report2[i].chars * charDelay;  // time it takes to output this text
+    timeElapsed += report2[i].time + delayBetweenLines;  // add delay period to total time elapsed
+    report2[i + 1] = {outputAfterMs: timeElapsed};  // initialize next array element; next line will output after this many ms
+
+    console.log("report2[0] is",report2[0]);
+    console.log("first line outputs at time",report2[0].outputAfterMs);
+    console.log("second line outputs at time",report2[1].outputAfterMs);
+
+    // use iife's to schedule future events with values bound to present context
+    setTimeout(
+      (function(i){  // iife binds function values to current values of i, charDelay in the current context
+        return function() {
+          console.log(`element no. ${report2[i].index} at time ${report2[i].outputAfterMs}`);
+        }
+      })(i), report2[i].outputAfterMs
+    );
+    //setTimeout(console.log(performance.now),timeElapsed);
+    setTimeout(
+      (function(i,charDelay){  // iife binds function values to current values of i, charDelay in the current context
+        return function() {
+          ttyoutput(report2[i].text, charDelay);
+        }
+      })(i,charDelay), report2[i].outputAfterMs
+    );
+  }  // end for loop
+  // after all lines of text are scheduled to be output,
+  // the last task to schedule is turning off the "battle" button.
+  // this one doesn't have to be an iife because there are no variables to bind
+  console.log("button scheduled to turn off at time ",report2[i].outputAfterMs);
+  setTimeout(
+    function(){
+      document.getElementById("battleButton").setAttribute("src","img/redButton-unlit.png");
+    }, report2[i].outputAfterMs
+  );
+}
+
+
+function ttyoutput(strang, charDelay) {
+  var s = $(".type-text").html();
+  var i = 0;
+  var intervalID = setInterval(function(){
+    s += strang.charAt(i);
+    $(".type-text").html(s);
+    i++;
+    if (i == strang.length) {
+      $(".type-text").html(s + "<br>");
+      clearInterval(intervalID);
+      return;
+    }
+  },charDelay);
+}

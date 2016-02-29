@@ -1,7 +1,3 @@
-.hidden {
-  visibility: hidden;
-}
-
 body {
   position: relative;
   background-image: url('../img/panel-workingcopy.jpg');
@@ -9,15 +5,20 @@ body {
   font-family: "Karla", Arial, sans-serif;
 }
 
-input[type="text"] {
-  font-family: "Karla", Arial, sans-serif;
-  font-weight: bold;
-}
-
 #battleButton {
   position: absolute;
   top: 321px;
   left: 653px;
+}
+
+#outputField {
+  color: white;
+  font-size: .8em;
+}
+
+.type-text {
+  color: white;
+  font-size: .8em;
 }
 
 .col-1 {position: absolute; left: 38px;}
@@ -51,7 +52,6 @@ input[type="text"] {
 .YGCol-5 {position: absolute; left: 176px;}
 .YGCol-6 {position: absolute; left: 196px;}
 .YGCol-7 {position: absolute; left: 216px;}
-
 .YGCol-8 {position: absolute; left: 283px;}
 .YGCol-9 {position: absolute; left: 303px;}
 .YGCol-10 {position: absolute; left: 323px;}
@@ -59,7 +59,6 @@ input[type="text"] {
 .YGCol-12 {position: absolute; left: 363px;}
 .YGCol-13 {position: absolute; left: 383px;}
 .YGCol-14 {position: absolute; left: 403px;}
-
 .YGCol-15 {position: absolute; left: 472px;}
 .YGCol-16 {position: absolute; left: 492px;}
 .YGCol-17 {position: absolute; left: 512px;}
