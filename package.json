@@ -2,7 +2,7 @@
   "name": "robot-battledome-shupac800",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "index.php",
   "scripts": {
     "test": "",
   },
