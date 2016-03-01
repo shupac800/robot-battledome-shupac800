@@ -1,0 +1,91 @@
+body {
+  position: relative;
+  background-image: url('../img/panel.jpg');
+  background-repeat: no-repeat;
+}
+
+#battleButton {
+  position: absolute;
+  top: 321px;
+  left: 653px;
+}
+
+.type-text p {
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-size: .8em;
+}
+
+#p1RobotName {
+  font-family: "Karla", "Arial", sans-serif;
+  position: absolute;
+  top: 0px;
+  left: 720px;
+}
+
+#p2RobotName {
+  font-family: "Karla", "Arial", sans-serif;
+  position: absolute;
+  top: 0px;
+  left: 945px;
+}
+
+#outputTextGoesHere {
+  position: absolute;
+  background-color: black;
+  width: 400px;
+  overflow: auto;
+  top: 30px;
+  left: 720px;
+  /*height: 612px;*/
+  height: 260px;
+  font-family: "Karla", "Arial", sans-serif;
+  font-size: 1.2em;
+}
+
+.col-1 {position: absolute; left: 38px;}
+.col-2 {position: absolute; left: 230px;}
+.col-3 {position: absolute; left: 436px;}
+
+.row-1 {position: absolute; top: 38px;}
+.row-2 {position: absolute; top: 72px;}
+.row-3 {position: absolute; top: 106px;}
+.row-4 {position: absolute; top: 141px;}
+.row-5 {position: absolute; top: 182px;}
+.row-6 {position: absolute; top: 215px;}
+.row-7 {position: absolute; top: 362px;}
+.row-8 {position: absolute; top: 396px;}
+.row-9 {position: absolute; top: 430px;}
+.row-10 {position: absolute; top: 465px;}
+.row-11 {position: absolute; top: 506px;}
+.row-12 {position: absolute; top: 539px;}
+
+.YGRow-1 {position: absolute; top: 250px;}
+.YGRow-2 {position: absolute; top: 273px;}
+.YGRow-3 {position: absolute; top: 296px;}
+.YGRow-4 {position: absolute; top: 571px;}
+.YGRow-5 {position: absolute; top: 593px;}
+.YGRow-6 {position: absolute; top: 616px;}
+
+.YGCol-1 {position: absolute; left: 96px;}
+.YGCol-2 {position: absolute; left: 116px;}
+.YGCol-3 {position: absolute; left: 136px;}
+.YGCol-4 {position: absolute; left: 156px;}
+.YGCol-5 {position: absolute; left: 176px;}
+.YGCol-6 {position: absolute; left: 196px;}
+.YGCol-7 {position: absolute; left: 216px;}
+.YGCol-8 {position: absolute; left: 283px;}
+.YGCol-9 {position: absolute; left: 303px;}
+.YGCol-10 {position: absolute; left: 323px;}
+.YGCol-11 {position: absolute; left: 343px;}
+.YGCol-12 {position: absolute; left: 363px;}
+.YGCol-13 {position: absolute; left: 383px;}
+.YGCol-14 {position: absolute; left: 403px;}
+.YGCol-15 {position: absolute; left: 472px;}
+.YGCol-16 {position: absolute; left: 492px;}
+.YGCol-17 {position: absolute; left: 512px;}
+.YGCol-18 {position: absolute; left: 532px;}
+.YGCol-19 {position: absolute; left: 552px;}
+.YGCol-20 {position: absolute; left: 572px;}
+.YGCol-21 {position: absolute; left: 592px;}

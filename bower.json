@@ -1,0 +1,21 @@
+{
+  "name": "robot-battledome-shupac800",
+  "homepage": "https://github.com/nss-day-cohort-12/robot-battledome-shupac800",
+  "authors": [
+    "shupac800 <davidshuman@gmail.com>"
+  ],
+  "description": "Robot Battledome Exercise from Modern Javascript Developer unit",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.1"
+  }
+}

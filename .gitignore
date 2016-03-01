@@ -1,0 +1,11 @@
+bower_components
+node_modules
+lib
+MIT.LICENSE
+jasmine-standalone-2.4.1.zip
+*.psd
+black-tape.*
+panel.psd
+panel2.psd
+panel-workingcopy.psd
+panel-old.jpg
