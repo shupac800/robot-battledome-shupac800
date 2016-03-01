@@ -1,10 +1,9 @@
 {
   "name": "robot-battledome-shupac800",
   "version": "1.0.0",
-  "description": "",
+  "description": "1. `cd` to your quizzes directory.\r 1. Clone this repository and `cd` into the directory it creates.\r 1. Now run the following commands.",
   "main": "index.php",
   "scripts": {
-    "test": "",
   },
   "repository": {
     "type": "git",
@@ -23,5 +22,7 @@
     "gulp-watch": "^4.3.5",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0"
+  },
+  "dependencies": {
   }
 }
