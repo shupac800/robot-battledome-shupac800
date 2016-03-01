@@ -1,10 +1,10 @@
 {
   "name": "robot-battledome-shupac800",
   "version": "1.0.0",
-  "description": "1. `cd` to your quizzes directory.\r 1. Clone this repository and `cd` into the directory it creates.\r 1. Now run the following commands.",
-  "main": "index.js",
+  "description": "",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "",
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nss-day-cohort-12/robot-battledome-shupac800#readme",
   "devDependencies": {
+    "bower": "^1.7.7",
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.0",
     "gulp-watch": "^4.3.5",

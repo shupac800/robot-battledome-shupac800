@@ -174,7 +174,7 @@ function attack(attacker,defender) {
   if (defender.robot.health <= 0) {
     console.log(`${attacker.robotName} the ${attacker.robot.subtype} ${attacker.robot.type} has vanquished ${defender.robotName} the ${defender.robot.subtype} ${defender.robot.type}!`);
     report.push(`${attacker.robotName} the ${attacker.robot.subtype} ${attacker.robot.type} has vanquished ${defender.robotName} the ${defender.robot.subtype} ${defender.robot.type}!`);
-    doAnotherRound = false;  // don't continue battle (have to use var, not let)
+    doAnotherRound = false;  // don't continue battle; it's over!
   }
   return doAnotherRound;
 }
@@ -300,9 +300,8 @@ function Weapon(weaponName) {
 function turnOffAllRedLEDs(playerNumber,col) {
   var startRow = ((playerNumber - 1) * 6) + 1;  // i.e. 1 for P1, 7 for P2
   for (let i = startRow; i < startRow + 6; i++) {
-    let classString = `col-${col} row-${i}`;
-    let buttonEl = document.getElementsByClassName(classString);
-    buttonEl[0].setAttribute("src","img/unlitredLED.png");
+    let classString = `.col-${col}.row-${i}`;
+    $(classString).attr("src","img/unlitredLED.png");
   }
 }
 
@@ -313,22 +312,20 @@ function doYGLEDs(playerNumber,col,ledPattern) {
   for (let i = startRow; i < startRow + 3; i++) {
     var stringIndex = 0;
     for (let j = startCol; j < startCol + 3; j++) {  // LEDs 1-3 are yellow
-      let classString = `YGCol-${j} YGRow-${i}`;
-      let buttonEl = document.getElementsByClassName(classString);
+      let classString = `.YGCol-${j}.YGRow-${i}`;
       if (ledPattern[ledPatternIndex].charAt(stringIndex) == "1") {
-        buttonEl[0].setAttribute("src","img/lityellowLED.png");
+        $(classString).attr("src","img/lityellowLED.png");
       } else {
-        buttonEl[0].setAttribute("src","img/unlityellowLED.png");
+        $(classString).attr("src","img/unlityellowLED.png");
       }
       stringIndex++;
     }
     for (let j = startCol + 3; j < startCol + 7; j++) {  // LEDs 4-7 are green
-      let classString = `YGCol-${j} YGRow-${i}`;
-      let buttonEl = document.getElementsByClassName(classString);
+      let classString = `.YGCol-${j}.YGRow-${i}`;
       if (ledPattern[ledPatternIndex].charAt(stringIndex) == "1") {
-        buttonEl[0].setAttribute("src","img/litgreenLED.png");
+        $(classString).attr("src","img/litgreenLED.png");
       } else {
-        buttonEl[0].setAttribute("src","img/unlitgreenLED.png");
+        $(classString).attr("src","img/unlitgreenLED.png");
       }
       stringIndex++;
     }
@@ -375,7 +372,7 @@ function scheduleOutput() {
   // this one doesn't have to be an IIFE because there are no variables to bind
   setTimeout(
     function(){
-      $("#battleButton").prop("src","img/redButton-unlit.png");  // turn off "battle" button
+      $("#battleButton").attr("src","img/redButton-unlit.png");  // turn off "battle" button
       $("#battleButton").prop("inProgress",false);  // reset inProgress property
     }, ttyObject[i].outputAfterMs
   );
@@ -413,11 +410,11 @@ var form = {
 };
 
 // to conform with instructions, all buttons except p1type should start off as hidden
-$(".p1weapon").prop("style","display:none");
-$(".p1mod").prop("style","display:none");
-$(".p2type").prop("style","display:none");
-$(".p2weapon").prop("style","display:none");
-$(".p2mod").prop("style","display:none");
+$(".p1weapon").attr("style","display:none");
+$(".p1mod").attr("style","display:none");
+$(".p2type").attr("style","display:none");
+$(".p2weapon").attr("style","display:none");
+$(".p2mod").attr("style","display:none");
 
 // add P1 event listeners
 $("#p1RobotName").click(function() {
@@ -426,8 +423,8 @@ $("#p1RobotName").click(function() {
 $(".p1type").click(function() {
   // turn off all red LEDs in this class
   turnOffAllRedLEDs(1,1);
-  // turn on LED of button that was clicked -- how to do this next line in jQuery?
-  document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
+  // turn on LED of button that was clicked
+  $(event.target).attr("src","img/litredLED.png");
   form.type[1] = event.target.id.slice(3);  // take off the "p1-" prefix
   // turn off/on the yellow and green LEDs in this class
   var dummySubtypeObj = {};
@@ -454,31 +451,31 @@ $(".p1type").click(function() {
       break;
   }
   doYGLEDs(1,1,dummySubtypeObj.ledPattern);
-  $(".p1weapon").prop("style","display:inline");
+  $(".p1weapon").attr("style","display:inline");
 });
 
 $(".p1weapon").click(function() {
   // turn off all red LEDs in this class
   turnOffAllRedLEDs(1,2);
-  // turn on LED of button that was clicked -- how to do this next line in jQuery?
-  document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
+  // turn on LED of button that was clicked
+  $(event.target).attr("src","img/litredLED.png");
   form.weapon[1] = event.target.id.slice(3);  // take off the "p1-" prefix
   // turn off/on the yellow and green LEDs in this class
   let dummyWeaponObj = new Weapon(form.weapon[1]);
   doYGLEDs(1,2,dummyWeaponObj.ledPattern);
-  $(".p1mod").prop("style","display:inline");
+  $(".p1mod").attr("style","display:inline");
 });
 
 $(".p1mod").click(function() {
   // turn off all red LEDs in this class
   turnOffAllRedLEDs(1,3);
-  // turn on LED of button that was clicked -- how to do this next line in jQuery?
-  document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
+  // turn on LED of button that was clicked
+  $(event.target).attr("src","img/litredLED.png");
   form.mod[1] = event.target.id.slice(3);  // take off the "p1-" prefix
   // turn off/on the yellow and green LEDs in this class
   let dummyModObj = new Mod(form.mod[1]);
   doYGLEDs(1,3,dummyModObj.ledPattern);
-  $(".p2type").prop("style","display:inline");
+  $(".p2type").attr("style","display:inline");
 });
 
 // add P2 event listeners
@@ -488,8 +485,8 @@ $("#p2RobotName").click(function() {
 $(".p2type").click(function() {
   // turn off all red LEDs in this class
   turnOffAllRedLEDs(2,1);
-  // turn on LED of button that was clicked -- how to do this next line in jQuery?
-  document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
+  // turn on LED of button that was clicked
+  $(event.target).attr("src","img/litredLED.png");
   form.type[2] = event.target.id.slice(3);  // take off the "p2-" prefix
   // turn off/on the yellow and green LEDs in this class
   var dummySubtypeObj = {};
@@ -516,26 +513,26 @@ $(".p2type").click(function() {
       break;
   }
   doYGLEDs(2,1,dummySubtypeObj.ledPattern);
-  $(".p2weapon").prop("style","display:inline");
+  $(".p2weapon").attr("style","display:inline");
 });
 
 $(".p2weapon").click(function() {
   // turn off all red LEDs in this class
   turnOffAllRedLEDs(2,2);
-  // turn on LED of button that was clicked -- how to do this next line in jQuery?
-  document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
+  // turn on LED of button that was clicked
+  $(event.target).attr("src","img/litredLED.png");
   form.weapon[2] = event.target.id.slice(3);  // take off the "p1-" prefix
   // turn off/on the yellow and green LEDs in this class
   let dummyWeaponObj = new Weapon(form.weapon[2]);
   doYGLEDs(2,2,dummyWeaponObj.ledPattern);
-  $(".p2mod").prop("style","display:inline");
+  $(".p2mod").attr("style","display:inline");
 });
 
 $(".p2mod").click(function() {
   // turn off all red LEDs in this class
   turnOffAllRedLEDs(2,3);
-  // turn on LED of button that was clicked -- how to do this next line in jQuery?
-  document.getElementById(event.target.id).setAttribute("src","img/litredLED.png");
+  // turn on LED of button that was clicked
+  $(event.target).attr("src","img/litredLED.png");
   form.mod[2] = event.target.id.slice(3);  // take off the "p1-" prefix
   // turn off/on the yellow and green LEDs in this class
   let dummyModObj = new Mod(form.mod[2]);
@@ -570,7 +567,7 @@ $("#battleButton").click(function() {
   console.clear();
   report = [];  // clear report array
   $(".type-text").html("");  // clear text display area
-  $("#battleButton").prop("src","img/redButton-lit.png");  // illuminate "battle" button
+  $("#battleButton").attr("src","img/redButton-lit.png");  // illuminate "battle" button
 
   // build players' robots
   let P1 = playerInit(1,form);
